@@ -1,13 +1,34 @@
+﻿using Application;
+using Clean.Api.ExceptionHandler;
+using Clean.Api.Filters;
+using Persistence;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddControllers();
+builder.Services.AddControllers(options => {
+    options.Filters.Add<FluentValidationFilter>();
+    options.SuppressImplicitRequiredAttributeForNonNullableReferenceTypes = true; //null kontrolü yapma
+
+});
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddRepositories(builder.Configuration).AddServices (builder.Configuration);
+
+//FluentValidation ekledik.
+builder.Services.AddScoped(typeof(NotFoundFilter<,>));
+
+//exception Handler ı ekledik.
+builder.Services.AddExceptionHandler<CriticalExceptionHandler>();
+builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+
 var app = builder.Build();
+
+// biz yazdık.
+app.UseExceptionHandler(i => { });
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

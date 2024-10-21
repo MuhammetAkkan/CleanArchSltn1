@@ -61,7 +61,7 @@ public class CategoryService(ICategoryRepository categoryRepository, IMapper map
 
         await unitOfWork.SaveChangesAsync();
 
-        return ServiceResult.Success(statusCode: HttpStatusCode.OK);
+        return ServiceResult.Success(status : HttpStatusCode.OK);
     }
 
     public async Task<ServiceResult> DeleteCategoryAsync(int id)

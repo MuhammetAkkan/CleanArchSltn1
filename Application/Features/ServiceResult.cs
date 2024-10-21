@@ -5,123 +5,89 @@ namespace Application.Features;
 
 public class ServiceResult<T>
 {
-    public T? Data { get; set; } //Başarılı olduğunda T tipinde bir data döndürülecek.
+    public T? Data { get; set; }
+    public List<string>? ErrorMessage { get; set; }
+    [JsonIgnore] public bool IsSuccess => ErrorMessage == null || ErrorMessage.Count == 0;
+    [JsonIgnore] public bool IsFail => !IsSuccess;
+    [JsonIgnore] public HttpStatusCode StatusCode { get; set; }
 
-    public List<T>? Datas { get; set; } //Başarılı olduğunda T tipinde bir data serisi döndürülecek
-    public List<string>? ErrorMessage { get; set; } //Başarısız olma durumunda hataları tutacak.
+    [JsonIgnore] public string? UrlAsCreated { get; set; }
 
-    [JsonIgnore]
-    public bool IsSuccess => ErrorMessage == null || ErrorMessage.Count == 0; //Başarılı olma durumunu kontrol eder.
-
-    [JsonIgnore]
-    public bool IsFail => !IsSuccess; //Başarısız olma durumunu kontrol eder.
-
-    [JsonIgnore]
-    public HttpStatusCode Status { get; set; }
-
-
-    [JsonIgnore]
-    public string? UrlAsCreated { get; set; }
-
-    //statik factory methodlar
+    //static factory method
     public static ServiceResult<T> Success(T data, HttpStatusCode statusCode = HttpStatusCode.OK)
-    { //default bir http status code belirledik.
-        return new ServiceResult<T>
-        {
-            Data = data, //nesne döndürülecek yani data döndürülecek.
-            Status = statusCode,
-        };
-    }
-
-    public static ServiceResult<T> Success(List<T> datas, HttpStatusCode statusCode = HttpStatusCode.OK)
-    { //default bir http status code belirledik.
-        return new ServiceResult<T>
-        {
-            Datas = datas,
-            Status = statusCode,
-        };
-    }
-
-    public static ServiceResult<T> SuccessAsCreated(T data, string url)
-    { //default bir http status code belirledik.
-        return new ServiceResult<T>
-        {
-            Data = data, //nesne döndürülecek yani data döndürülecek.
-            Status = HttpStatusCode.Created,
-            UrlAsCreated = url
-        };
-    }
-
-
-
-
-
-    public static ServiceResult<T> Fail(List<string> errorMessage, HttpStatusCode statusCode = HttpStatusCode.BadRequest)
     {
-        return new ServiceResult<T>
+        return new ServiceResult<T>()
+        {
+            Data = data,
+            StatusCode = statusCode
+        };
+    }
+
+    public static ServiceResult<T> SuccessAsCreated(T data, string urlAsCreated)
+    {
+        return new ServiceResult<T>()
+        {
+            Data = data,
+            StatusCode = HttpStatusCode.Created,
+            UrlAsCreated = urlAsCreated
+        };
+    }
+
+
+    public static ServiceResult<T> Fail(List<string> errorMessage,
+        HttpStatusCode statusCode = HttpStatusCode.BadRequest)
+    {
+        return new ServiceResult<T>()
         {
             ErrorMessage = errorMessage,
-            Status = statusCode
+            StatusCode = statusCode
         };
     }
 
     public static ServiceResult<T> Fail(string errorMessage, HttpStatusCode statusCode = HttpStatusCode.BadRequest)
     {
-        return new ServiceResult<T>
+        return new ServiceResult<T>()
         {
             ErrorMessage = [errorMessage],
-            Status = HttpStatusCode.BadRequest
+            StatusCode = statusCode
         };
     }
-
-
 }
+
 
 public class ServiceResult
 {
+    public List<string>? ErrorMessage { get; set; }
 
-    public List<string>? ErrorMessage { get; set; } //Başarısız olma durumunda hataları tutacak.
+    [JsonIgnore] public bool IsSuccess => ErrorMessage == null || ErrorMessage.Count == 0;
+    [JsonIgnore] public bool IsFail => !IsSuccess;
+    [JsonIgnore] public HttpStatusCode Status { get; set; }
 
-    [JsonIgnore]
-    public bool IsSuccess => ErrorMessage == null || ErrorMessage.Count == 0; //Başarılı olma durumunu kontrol eder.
-
-    [JsonIgnore]
-    public bool IsFail => !IsSuccess; //Başarısız olma durumunu kontrol eder.
-
-    [JsonIgnore]
-    public HttpStatusCode Status { get; set; }
-
-
-    [JsonIgnore]
-    public string? UrlAsCreated { get; set; }
-
-    //statik factory methodlar
-    public static ServiceResult Success(HttpStatusCode statusCode = HttpStatusCode.OK)
-    { //default bir http status code belirledik.
-        return new ServiceResult
+    //static factory method
+    public static ServiceResult Success(HttpStatusCode status = HttpStatusCode.OK)
+    {
+        return new ServiceResult()
         {
-            Status = statusCode,
+            Status = status
         };
     }
 
-
-    public static ServiceResult Fail(List<string> errorMessage, HttpStatusCode statusCode = HttpStatusCode.BadRequest)
+    public static ServiceResult Fail(List<string> errorMessage,
+        HttpStatusCode status = HttpStatusCode.BadRequest)
     {
-        return new ServiceResult
+        return new ServiceResult()
         {
             ErrorMessage = errorMessage,
-            Status = statusCode
+            Status = status
         };
     }
 
-    public static ServiceResult Fail(string errorMessage, HttpStatusCode statusCode = HttpStatusCode.BadRequest)
+    public static ServiceResult Fail(string errorMessage, HttpStatusCode status = HttpStatusCode.BadRequest)
     {
-        return new ServiceResult
+        return new ServiceResult()
         {
             ErrorMessage = [errorMessage],
-            Status = statusCode
+            Status = status
         };
     }
-
-
 }
