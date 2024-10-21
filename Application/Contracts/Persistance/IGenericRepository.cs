@@ -15,19 +15,21 @@ public interface IGenericRepository<T, in TId> where T : class where TId : struc
     */
     #endregion
 
-    ValueTask<T> GetByIdAsync(TId id);
+    ValueTask<T?> GetByIdAsync(TId id);
 
     void Update(T entity);
 
     void Delete(T entity);
 
-    ValueTask<T> CreateAsync(T entity);
+    ValueTask CreateAsync(T entity);
 
     Task<bool> AnyAsync(Expression<Func<T, bool>> predicate);
 
     Task<bool> AnyAsync(TId id);
 
     Task<List<T>> GetAllAsync();
+
+    Task<List<T>> GetAllPagedAsync(int pageNumber, int pageSize);
 
 
 }

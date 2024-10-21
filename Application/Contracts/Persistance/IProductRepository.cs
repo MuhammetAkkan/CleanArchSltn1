@@ -9,6 +9,4 @@ public interface IProductRepository : IGenericRepository<Product, int>
 
     public Task<List<Product>> GetMinStockProducts(int minStockCount);
 
-    public Task<List<Product>> GetProductsByCategoryAsync(int categoryId);
-
 }
