@@ -1,4 +1,5 @@
-﻿using Application.Contracts.Persistance;
+﻿using Application.Contracts.Caching;
+using Application.Contracts.Persistance;
 using Application.Features.Products.Create;
 using Application.Features.Products.Update;
 using AutoMapper;
@@ -8,13 +9,28 @@ using Microsoft.AspNetCore.Mvc.Infrastructure;
 
 namespace Application.Features.Products;
 
-public class ProductService(IProductRepository productRepository, IMapper mapper, IValidator<CreateProductRequest> createValidator, IValidator<UpdateProductRequest> updateValidator, IUnitOfWork unitOfWork) : IProductService
+public class ProductService(IProductRepository productRepository, IMapper mapper, IValidator<CreateProductRequest> createValidator, IValidator<UpdateProductRequest> updateValidator, IUnitOfWork unitOfWork, ICacheService cacheService) : IProductService
 {
+
+    private const string ProductListCacheKey = "ProductListCacheKey";
+
     public async Task<ServiceResult<List<ProductDto>>> GetAllListAsync()
     {
+        //1.cahce sorduk
+        var productListAsCached = await cacheService.GetAsync<List<ProductDto>>(ProductListCacheKey);
+
+        //2.cache varsa cache den döndük
+        if (productListAsCached is not null)
+            return ServiceResult<List<ProductDto>>.Success(productListAsCached);
+
+
+        //3.cache yoksa db den çektik
         var products = await productRepository.GetAllAsync();
 
         var result = mapper.Map<List<ProductDto>>(products);
+
+        await cacheService.AddAsync(ProductListCacheKey, products, TimeSpan.FromMinutes(1));
+
 
         return ServiceResult<List<ProductDto>>.Success(result);
     }

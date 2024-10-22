@@ -1,4 +1,6 @@
 ﻿using Application;
+using Application.Contracts.Caching;
+using Caching;
 using Clean.Api.ExceptionHandler;
 using Clean.Api.Filters;
 using Persistence;
@@ -24,6 +26,10 @@ builder.Services.AddScoped(typeof(NotFoundFilter<,>));
 //exception Handler ı ekledik.
 builder.Services.AddExceptionHandler<CriticalExceptionHandler>();
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+
+//added Cache
+builder.Services.AddMemoryCache();
+builder.Services.AddSingleton<ICacheService, CacheService>(); //sürekli aynı cache service kullanılacak, aynı bellekten yararlanılacak.
 
 var app = builder.Build();
 
