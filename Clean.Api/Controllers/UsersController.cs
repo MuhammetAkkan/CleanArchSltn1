@@ -34,7 +34,9 @@ namespace Clean.Api.Controllers
             => CustomActionResult(await userService.GetTokenAsync(userName));
 
 
-
+        [HttpDelete]
+        public async Task<IActionResult> Delete(int id)
+            => CustomActionResult(await userService.DeleteAsync(id));
 
     }
 }

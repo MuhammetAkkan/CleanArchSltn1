@@ -13,4 +13,6 @@ public interface IUserService
     Task<ServiceResult<UserDto?>> GetByIdAsync(int id);
 
     Task<ServiceResult<string>> GetTokenAsync(string userName);  // Token oluşturma metodu
+
+    Task<ServiceResult<int>> DeleteAsync(int id);
 }

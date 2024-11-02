@@ -70,4 +70,20 @@ public class UserService(IUserRepository userRepository, IMapper mapper, IValida
 
         return ServiceResult<string>.Success(token);
     }
+
+    public async Task<ServiceResult<int>> DeleteAsync(int id)
+    {
+        var user = await userRepository.GetByIdAsync(id);
+
+        if (user is null)
+        {
+            return ServiceResult<int>.Fail($"User with id '{id}' not found.");
+        }
+
+        userRepository.Delete(user);
+
+        await unitOfWork.SaveChangesAsync();
+
+        return ServiceResult<int>.Success(user.Id);
+    }
 }
