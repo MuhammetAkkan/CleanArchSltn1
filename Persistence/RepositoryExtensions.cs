@@ -6,6 +6,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Persistence.Categories;
 using Persistence.Interceptors;
 using Persistence.Products;
+using Persistence.Roles;
+using Persistence.Users;
 
 namespace Persistence;
 
@@ -38,6 +40,11 @@ public static class RepositoryExtensions
 
         //Category scoped
         services.AddScoped<ICategoryRepository, CategoryRepository>();
+
+        services.AddScoped<IUserRepository, UserRepository>();
+
+        services.AddScoped<IRoleRepository, RoleRepository>();
+
 
 
         services.AddScoped<IUnitOfWork, UnitOfWork>();

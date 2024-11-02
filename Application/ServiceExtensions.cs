@@ -4,6 +4,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
+using Application.Contracts.Persistance;
+using Application.Features.Roles;
+using Application.Features.User;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 
@@ -16,6 +19,12 @@ public static class ServicesExtensions
         services.AddScoped<IProductService, ProductService>();
 
         services.AddScoped<ICategoryService, CategoryService>();
+
+        services.AddScoped<IUserService, UserService>();
+
+        services.AddScoped<IRoleService, RoleService>();
+
+
 
         services.Configure<ApiBehaviorOptions>(options => options.SuppressModelStateInvalidFilter = true);
 

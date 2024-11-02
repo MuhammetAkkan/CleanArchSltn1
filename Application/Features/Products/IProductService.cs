@@ -7,7 +7,7 @@ public interface IProductService
 {
     Task<ServiceResult<List<ProductDto>>> GetAllListAsync();
 
-    Task<ServiceResult<List<ProductDto>>> GetPagedListAsnyc(int pageNumber, int pageSize);
+    Task<ServiceResult<List<ProductDto>>> GetPagedListAsync(int pageNumber, int pageSize);
     Task<ServiceResult<List<ProductDto>>> GetTopPriceProductsAsync(int count);
 
     Task<ServiceResult<List<ProductDto>>> GetMinStockProducts(int minStockCount);

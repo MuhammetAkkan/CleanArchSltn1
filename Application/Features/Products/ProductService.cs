@@ -36,7 +36,8 @@ public class ProductService(IProductRepository productRepository, IMapper mapper
     }
 
 
-    public async Task<ServiceResult<List<ProductDto>>> GetPagedListAsnyc(int pageNumber, int pageSize)
+
+    public async Task<ServiceResult<List<ProductDto>>> GetPagedListAsync(int pageNumber, int pageSize)
     {
         var skipValue = (pageNumber - 1) * pageSize;
 

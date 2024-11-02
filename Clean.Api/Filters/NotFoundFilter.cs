@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Clean.Api.Filters;
 
-public class NotFoundFilter<T, TId>(IGenericRepository<T, TId> genericRepository) : Attribute, IAsyncActionFilter where T : class where TId : struct
+public class NotFoundFilter<T, TId>(IGenericRepository<T, TId> genericRepository) : IAsyncActionFilter where T : class where TId : struct
 {
 
 

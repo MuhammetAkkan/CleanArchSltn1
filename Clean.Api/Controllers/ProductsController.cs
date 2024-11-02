@@ -1,6 +1,8 @@
 ﻿using Application.Features.Products;
 using Application.Features.Products.Create;
 using Application.Features.Products.Update;
+using Clean.Api.Attribute;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Clean.Api.Controllers;
@@ -10,6 +12,7 @@ namespace Clean.Api.Controllers;
 public class ProductsController(IProductService productService) : CustomBaseController
 {
     [HttpGet]
+    [Authorize(AuthenticationSchemes = "Bearer"), RoleFilter("Admin")]
     public async Task<IActionResult> GetAll() 
         => CustomActionResult(await productService.GetAllListAsync());
 
